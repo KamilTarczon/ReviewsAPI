@@ -1,0 +1,236 @@
+﻿!!! Dodawanie nowego modelu (tablicy)
+1. Utworzenie folderu "models"
+2. Dodanie w nim klasy o nazwie modelu
+3. Dodanie w nim atrybutów (prop)
+4. Dodanie kontrollera poprzez PPM, nowy kontroler, pusty.
+
+
+
+!!! Dodawanie endpointu "GET"
+1. Dodanie w kontrolerze:
+
+    [Route("api/[controller]")]  // [controller] oznacza co będzie prefixem w API (SuperHero(prefix)Controller)
+    [ApiController]
+    public class SuperHeroController : ControllerBase  // Dziedziczenie ControllBase!
+    {
+        [HttpGet]  // Dodanie nowego endpointu w api w postaci Get
+        public async Task<ActionResult<List<SuperHero>>> Get()  // Funkcja Async, zwracająca ActionResult jako List'e "SuperHero" Czyli modelu
+        {
+            var heroes = new List<SuperHero>  // Dodanie nowego superbohatera "hardcode"
+            {
+                new SuperHero { Id = 1,Name = "Spider Man", FirstName="Peter", LastName="Parker", Place="New York City"}
+            };
+
+            return Ok(heroes);  // Zwracanie że wszystko jest ok
+        }
+    }
+
+
+
+!!! Dodanie endpointu "Post"
+1. Dodanie w kontrolerze:
+
+        [HttpPost]  // Dodawanie nowej rzeczy do tablicy
+        public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero)
+            // Funkcja Async, pobierajaca Liste SuperHero, AddHero - Nazwa, (SuperHero hero) oznacza co przyjmujemy
+        {
+            heroes.Add(hero);  // Dodaje bohatero odebranego w endpoincie do listy "hero" utworzonej jako private static
+            return Ok(heroes);
+        }
+
+
+
+!!! Edytowanie rzeczy w tablicy "Put"
+1. Dodanie w kontrolerze:
+
+        [HttpPut]  // Edytowanie rzeczy w tablicy
+        public async Task<ActionResult<List<SuperHero>>> UpdateHero(SuperHero request)
+        // Funkcja Async, pobierajaca Liste SuperHero, AddHero - Nazwa, (SuperHero hero) oznacza co przyjmujemy
+        {
+            var hero = heroes.Find(h => h.Id == request.Id);  // Szukanie bohatera po ID w prywatnej Liscie SuperHero
+
+            if (hero == null)  // Jeśli hero o takim ID nie istnieje to wywłowa się akcja
+            {
+                return BadRequest("Hero not found.");
+            }
+
+            // Nadpisywanie prywatnej listy danymi z requestu
+            hero.Name = request.Name;
+            hero.FirstName = request.FirstName;
+            hero.LastName = request.LastName;
+            hero.Place = request.Place;
+            // Koniec 
+
+            //heroes.Add(hero);  // Dodaje bohatero odebranego w endpoincie do listy "hero" utworzonej jako private static
+            return Ok(heroes);
+        }
+
+
+
+!!! Usuwanie rzeczy z tablicy "Delete"
+1. Dodanie w kontrolerze:
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<SuperHero>> Delete(int id)  // Funkcja Async, zwracająca ActionResult jako "SuperHero" Czyli modelu pojedynczego po podanym Id
+        {
+            var hero = heroes.Find(h => h.Id == id);  // Szukanie bohatera po ID w prywatnej Liscie SuperHero
+
+            if (hero == null)  // Jeśli hero o takim ID nie istnieje to wywłowa się akcja
+            {
+                return BadRequest("Hero not found.");
+            }
+
+            heroes.Remove(hero);  // Usuwa "hero" z lity utworzonej jako private static
+            return Ok(hero);
+        }
+
+
+======================================================================
+ENTITY.FRAMEWORK
+======================================================================
+!!! Początek 
+1. Pobranie Microsoft.EntityFrameworkCore, Microsoft.EntityFrameWorkCore.Design, Microsoft.EntityFrameworkCore.SqlServer
+2. Utworzenie folderu "Data" i w nim klasę "DataContext"  // Utworzenie DataContext
+3. Dodanie dziedziczenia ": DbContext"
+
+
+
+!!! DataContext
+1. Dodanie na początku:
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+2. Dodanie DbSetu dla każdego z modeli
+    public DbSet<SuperHero> SuperHeros { get; set; }  // Utworzenie DbSet<Model>, nazwa tablicy (z reguły w liczbie mnogiej)
+3. Dodanie w Program.cs Contexu:
+
+builder.Services.AddDbContext<DataContext>(options =>  // Dodanie bazy danych jak i kontekstu z którego program ma korzystać
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));  // Ustawienie ConnectionStringa z którego ma korzystać
+}
+);
+
+
+
+
+
+!!! Sprawdzanie czy się ma zainstalowanego "EntityFrameWork"
+1. Wpisanie w konsoli menadżera pakietów:
+dotnet ef 
+- Jeśli się ma to baja, jeśli nie to:
+dotnet tool install --global dotnet-ef
+
+
+
+!!! Migracja kodu
+1. Pierwsza migracja, polecenie w konsoli menadżera pakietów:
+ dotnet ef migrations add CreateInitial  // Po tym powinny się utworzyć nowy folder "Migrations"
+ - Jeśli nie zadziała to musimy przejść w pliku projektu:
+ cd .\SuperHeroAPI
+
+
+
+ !!! Update Database
+ 1. Komenda w konsoli menadżęra pakietów:
+ dotnet ef database update
+
+
+!!! Dodanie ConnectionString
+1. Dodanie w pliku "appsettings.json"
+
+  "ConnectionStrings": {
+    "DefaultConnection": "server=localhost\\sqlexpress;database=nazwa;trusted_connection=true"
+  },
+
+
+  ======Kontrolery======
+  !!! Kontrolery
+  1. Dodanie na początku:
+
+          private readonly DataContext _context;
+
+        public SuperHeroController(DataContext context)
+        {
+            _context = context;
+        }
+
+2. Zwracanie i prace na bazie danych zaczynamy od: _context.
+
+await _context.SuperHeros.
+
+
+
+!!! Czasownik Post:
+
+        [HttpPost]  // Dodawanie nowej rzeczy do tablicy
+        public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero)
+            // Funkcja Async, pobierajaca Liste SuperHero, AddHero - Nazwa, (SuperHero hero) oznacza co przyjmujemy
+        {
+            _context.SuperHeros.Add(hero);  // Dodaje bohatero odebranego w endpoincie do listy "hero" utworzonej jako private static
+            await _context.SaveChangesAsync();  // Zapisywanie zmiany w bazie danych jako Async
+            return Ok(await _context.SuperHeros.ToListAsync());
+        }
+
+
+
+!!! Czasownik Get:
+
+        [HttpGet("{id}")]  // ("{id}") oznacza dla swaggera jakie argumenty przyjmuje endpoint
+        public async Task<ActionResult<SuperHero>> Get(int id)  // Funkcja Async, zwracająca ActionResult jako "SuperHero" Czyli modelu pojedynczego po podanym Id
+        {
+            var hero = _context.SuperHeros.FindAsync(id);  // Szukanie bohatera po ID w prywatnej Liscie SuperHero
+            
+            if(hero == null)  // Jeśli hero o takim ID nie istnieje to wywłowa się akcja
+            {
+                return BadRequest("Hero not found."); 
+            }
+
+            return Ok(hero);
+        }
+
+
+
+!!! Czasownik Put:
+
+        [HttpPut]  // Edytowanie rzeczy w tablicy
+        public async Task<ActionResult<List<SuperHero>>> UpdateHero(SuperHero request)
+        // Funkcja Async, pobierajaca Liste SuperHero, AddHero - Nazwa, (SuperHero hero) oznacza co przyjmujemy
+        {
+            var dbhero = await _context.SuperHeros.FindAsync(request.Id);  // Szukanie bohatera po ID w prywatnej Liscie SuperHero
+
+            if (dbhero == null)  // Jeśli hero o takim ID nie istnieje to wywłowa się akcja
+            {
+                return BadRequest("Hero not found.");
+            }
+
+            // Nadpisywanie prywatnej listy danymi z requestu
+            dbhero.Name = request.Name;
+            dbhero.FirstName = request.FirstName;
+            dbhero.LastName = request.LastName;
+            dbhero.Place = request.Place;
+
+            await _context.SaveChangesAsync();
+            // Koniec 
+
+            //heroes.Add(hero);  // Dodaje bohatero odebranego w endpoincie do listy "hero" utworzonej jako private static
+            return Ok(await _context.SuperHeros.ToListAsync());
+        }
+
+
+
+!!! Czasownik Delete
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<SuperHero>> Delete(int id)  // Funkcja Async, zwracająca ActionResult jako "SuperHero" Czyli modelu pojedynczego po podanym Id
+        {
+            var hero = await _context.SuperHeros.FindAsync(id);  // Szukanie bohatera po ID w prywatnej Liscie SuperHero
+
+            if (hero == null)  // Jeśli hero o takim ID nie istnieje to wywłowa się akcja
+            {
+                return BadRequest("Hero not found.");
+            }
+
+
+            _context.SuperHeros.Remove(hero);  // Usuwa "hero" z lity utworzonej jako private static
+
+            await _context.SaveChangesAsync();
+            return Ok(await _context.SuperHeros.ToListAsync());
+        }
