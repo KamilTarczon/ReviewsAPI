@@ -27,7 +27,7 @@ namespace ReviewsAPI.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost]  // Done
         public async Task<ActionResult<ReviewDto>> CreateReview(ReviewDtoAdd createDto)
         {
             return await _ReviewServices.AddReview(createDto);
@@ -35,10 +35,18 @@ namespace ReviewsAPI.Controllers
 
 
         
-        [HttpPut("assign/{idReview},{idReviewer},{idDrink}")]
+        [HttpPut("assign/{idReview},{idReviewer},{idDrink}")]  // Chyba done?
         public async Task<ActionResult<Review>> AssignReview(int idReview, int idReviewer, int idDrink)
         {
             return await _ReviewServices.AssingReview(idReview, idReviewer, idDrink);   
+        }
+
+
+
+        [HttpGet("test/{value}")]  // Test
+        public async Task<ActionResult<List<ReviewDto>>> RatingEqualsTo(int value)
+        {
+            return await _ReviewServices.RatingEqualsTo(value);
         }
 
     }

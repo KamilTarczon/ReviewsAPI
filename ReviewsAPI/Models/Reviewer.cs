@@ -6,7 +6,6 @@
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public List<Review>? Review { get; set; }
-
         public Reviewer(string firstname, string lastname)
         {
             Firstname = firstname;

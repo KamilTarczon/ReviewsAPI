@@ -83,5 +83,13 @@ namespace ReviewsAPI.Services
             return await GetDrinks();
         }
 
+        async public Task<ActionResult<List<ReviewDto>>> GetReviewOnDrink(int id)
+        {
+            if (!await DrinkExistByID(id))
+                return NotFound();
+
+            return Ok(_context.Reviews.Where(p => p.DrinkId == id).ToList());
+        }
+
     }
 }

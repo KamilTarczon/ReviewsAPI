@@ -10,7 +10,7 @@ namespace ReviewsAPI.Helper
             CreateMap<Drink, DrinkDto>();
             CreateMap<Reviewer, ReviewerDto>();
             CreateMap<Review, ReviewDto>();
-            CreateMap<Review, ReviewDtoAddRev>();
+            CreateMap<Review, Review>();
         }
 
     }

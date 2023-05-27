@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReviewsAPI.Data;
 
@@ -11,9 +12,11 @@ using ReviewsAPI.Data;
 namespace ReviewsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230527204531_sixmigrations")]
+    partial class sixmigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,10 @@ namespace ReviewsAPI.Migrations
                     b.Property<float>("Rating")
                         .HasColumnType("real");
 
-                    b.Property<int?>("ReviewerId")
+                    b.Property<int?>("ReviewId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Reviewerid")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -68,7 +74,7 @@ namespace ReviewsAPI.Migrations
 
                     b.HasIndex("DrinkId");
 
-                    b.HasIndex("ReviewerId");
+                    b.HasIndex("Reviewerid");
 
                     b.ToTable("Reviews");
                 });
@@ -108,7 +114,7 @@ namespace ReviewsAPI.Migrations
 
                     b.HasOne("ReviewsAPI.Models.Reviewer", "Reviewer")
                         .WithMany("Review")
-                        .HasForeignKey("ReviewerId");
+                        .HasForeignKey("Reviewerid");
 
                     b.Navigation("Drink");
 

@@ -8,6 +8,8 @@
         public float Rating { get; set; }
         public Reviewer? Reviewer { get; set; }
         public Drink? Drink { get; set; }
+        public int? DrinkId { get; set; }
+        public int? ReviewerId { get; set; }
 
         public Review(string title, string text, float rating)
         {

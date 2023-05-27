@@ -74,6 +74,14 @@ namespace ReviewsAPI.Controllers
         {
             return await _drinkServices.GetDrinkFull();
         }
+
+
+
+        [HttpGet("reviews/{id}")]
+        public async Task<ActionResult<List<ReviewDto>>> GetReviewOnDrink(int id)
+        {
+            return await _drinkServices.GetReviewOnDrink(id);
+        }
     }
 }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReviewsAPI.Data;
 
@@ -11,9 +12,11 @@ using ReviewsAPI.Data;
 namespace ReviewsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230527201922_FourthMigrations")]
+    partial class FourthMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,13 +50,13 @@ namespace ReviewsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("DrinkId")
+                    b.Property<int?>("Drinkid")
                         .HasColumnType("int");
 
                     b.Property<float>("Rating")
                         .HasColumnType("real");
 
-                    b.Property<int?>("ReviewerId")
+                    b.Property<int?>("Reviewerid")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -66,9 +69,9 @@ namespace ReviewsAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("DrinkId");
+                    b.HasIndex("Drinkid");
 
-                    b.HasIndex("ReviewerId");
+                    b.HasIndex("Reviewerid");
 
                     b.ToTable("Reviews");
                 });
@@ -81,9 +84,6 @@ namespace ReviewsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("DrinkId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Firstname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -91,9 +91,6 @@ namespace ReviewsAPI.Migrations
                     b.Property<string>("Lastname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ReviewId")
-                        .HasColumnType("int");
 
                     b.HasKey("id");
 
@@ -104,11 +101,11 @@ namespace ReviewsAPI.Migrations
                 {
                     b.HasOne("ReviewsAPI.Models.Drink", "Drink")
                         .WithMany("Review")
-                        .HasForeignKey("DrinkId");
+                        .HasForeignKey("Drinkid");
 
                     b.HasOne("ReviewsAPI.Models.Reviewer", "Reviewer")
                         .WithMany("Review")
-                        .HasForeignKey("ReviewerId");
+                        .HasForeignKey("Reviewerid");
 
                     b.Navigation("Drink");
 

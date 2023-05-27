@@ -50,13 +50,18 @@ namespace ReviewsAPI.Services
             if (!await _drinksServices.DrinkExistByID(idDrink))
                 return BadRequest("Nie istnieje napój o takim Id!");
 
-            Reviewer reviewer = _context.Reviewers.Where(p => p.id == idReviewer).FirstOrDefault(); // d
-            Drink drink = _context.Drinks.Where(d => d.id == idDrink).FirstOrDefault(); // d
-            Review review = _context.Reviews.Where(r => r.id == idReview).FirstOrDefault();
+
+            Reviewer reviewer = await _context.Reviewers.FindAsync(idReviewer);
+            Drink drink = await _context.Drinks.FindAsync(idDrink);
+            Review review = await _context.Reviews.FindAsync(idReview);
+
+            if (review == null || reviewer == null || drink == null)
+                return BadRequest("Nie znaleziono recenzji, recenzenta lub napoju.");
 
             review.Reviewer = reviewer;
             review.Drink = drink;
-            _context.SaveChanges();
+
+            await _context.SaveChangesAsync();
 
             return Ok("git jest");
         }
@@ -64,7 +69,12 @@ namespace ReviewsAPI.Services
         async public Task<ActionResult<List<Review>>> CheckReview(int id)
         {
             Review review = await _context.Reviews.FindAsync(id);
-            return Ok(review);
+            return Ok(_mapper.Map<List<Review>>(_context.Reviews));
+        }
+
+        async public Task<ActionResult<List<ReviewDto>>> RatingEqualsTo(int rating)
+        {
+            return Ok(_mapper.Map<List<ReviewDto>>(_context.Reviews.Where(p => p.Rating == rating)));
         }
 
     }
