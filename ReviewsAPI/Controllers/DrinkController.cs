@@ -69,7 +69,7 @@ namespace ReviewsAPI.Controllers
 
 
 
-        [HttpGet("check")]
+        [HttpGet("check")] // Todo 
         public async Task<ActionResult<Drink>> GetFullDrink()
         {
             return await _drinkServices.GetDrinkFull();
@@ -77,7 +77,7 @@ namespace ReviewsAPI.Controllers
 
 
 
-        [HttpGet("reviews/{id}")]
+        [HttpGet("reviews/{id}")]  // Todo 
         public async Task<ActionResult<List<ReviewDto>>> GetReviewOnDrink(int id)
         {
             return await _drinkServices.GetReviewOnDrink(id);

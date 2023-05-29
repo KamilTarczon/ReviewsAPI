@@ -80,5 +80,29 @@ namespace ReviewsAPI.Services
             await _context.SaveChangesAsync();
             return await GetReviewers();
         }
+
+        async public Task<ActionResult<ReviewerDto>> GetReviews(int id)
+        {
+            if (!await ReviewerExistById(id))
+                return NotFound();
+
+            var reviewer = _context.Reviewers.Where(i => i.id == id).ToList();
+
+            var reviewerDtos = reviewer.Select(d => new ReviewerReviewDto
+            {
+                id = d.id,
+                Firstname = d.Firstname,
+                Lastname = d.Lastname,
+                Review = _context.Reviews.Where(s => s.ReviewerId == id).Select(s => new ReviewDto
+                {
+                    id = s.id,
+                    Title = s.Title,
+                    Text = s.Text,
+                    Rating = s.Rating
+                }).ToList()
+            }).ToList();
+
+            return Ok(reviewerDtos);
+        }
     }
 }

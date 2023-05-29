@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ReviewsAPI.Data;
 using ReviewsAPI.Dto;
 using ReviewsAPI.Models;
+using System.Reflection;
 
 namespace ReviewsAPI.Services
 {
@@ -88,8 +90,22 @@ namespace ReviewsAPI.Services
             if (!await DrinkExistByID(id))
                 return NotFound();
 
-            return Ok(_context.Reviews.Where(p => p.DrinkId == id).ToList());
-        }
+            var drinks = _context.Drinks.Where(i => i.id == id).Include(d => d.Review).ToList();
 
+            var drinkReviewDtos = drinks.Select(d => new DrinkReviewDto
+            {
+                id = d.id,
+                Name = d.Name,
+                Review = d.Review.Select(r => new ReviewDto
+                {
+                    id = r.id,
+                    Title = r.Title,
+                    Text = r.Text,
+                    Rating = r.Rating
+                }).ToList()
+            }).ToList();
+
+            return Ok(drinkReviewDtos);
+        }
     }
 }

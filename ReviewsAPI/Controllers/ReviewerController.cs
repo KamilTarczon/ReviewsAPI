@@ -37,6 +37,14 @@ namespace ReviewsAPI.Controllers
 
 
 
+        [HttpGet("id/reviews/{id}")]  // Done
+        public async Task<ActionResult<ReviewerDto>> GetReviews(int id)
+        {
+            return await _ReviewerServices.GetReviews(id);
+        }
+
+
+
         [HttpGet("fullname/{firstname},{lastname}")]  // Done
         public async Task<ActionResult<ReviewerDto>> GetByFullName(string firstname, string lastname)
         {
