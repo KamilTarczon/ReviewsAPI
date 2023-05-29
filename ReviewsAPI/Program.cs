@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DataContext>(options =>  // Dodanie bazy danych jak i kontekstu z którego program ma korzystaæ
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));  // Ustawienie ConnectionStringa z którego ma korzystaæ
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SeconConnection"));  // Ustawienie ConnectionStringa z którego ma korzystaæ
 }
 );
 builder.Services.AddTransient<DrinkServices>();  // Dodawanie "Services" monkaS
