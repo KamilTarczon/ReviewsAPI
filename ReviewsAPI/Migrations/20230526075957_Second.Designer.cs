@@ -75,7 +75,7 @@ namespace ReviewsAPI.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("ReviewsAPI.Models.Reviewer", b =>
+            modelBuilder.Entity("ReviewsAPI.Models.User", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -104,7 +104,7 @@ namespace ReviewsAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ReviewsAPI.Models.Reviewer", "Reviewer")
+                    b.HasOne("ReviewsAPI.Models.User", "User")
                         .WithMany("Review")
                         .HasForeignKey("Reviewerid")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -112,10 +112,10 @@ namespace ReviewsAPI.Migrations
 
                     b.Navigation("Drink");
 
-                    b.Navigation("Reviewer");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ReviewsAPI.Models.Reviewer", b =>
+            modelBuilder.Entity("ReviewsAPI.Models.User", b =>
                 {
                     b.Navigation("Review");
                 });

@@ -18,12 +18,12 @@ namespace ReviewsAPI.Services
             _mapper = mapper;
         }
 
-        async public Task<bool> ReviewerExistById(int id)
+        async public Task<bool> UserExistById(int id)
         {
             return _context.Reviewers.Any(p => p.id == id);
         }
 
-        async public Task<bool> ReviewerExistByFullName(string firstname, string lastname)
+        async public Task<bool> UserExistByFullName(string firstname, string lastname)
         {
             return _context.Reviewers.Any(p => p.Firstname == firstname && p.Lastname == lastname);
         }
@@ -35,7 +35,7 @@ namespace ReviewsAPI.Services
 
         async public Task<ActionResult<ReviewerDto>> GetById(int id)
         {
-            if (!await ReviewerExistById(id))
+            if (!await UserExistById(id))
                 return NotFound("Nie istnieje recenzja o takim ID");
 
             return Ok(_mapper.Map<List<ReviewerDto>>(_context.Reviewers.Where(p => p.id == id)));
@@ -43,7 +43,7 @@ namespace ReviewsAPI.Services
 
         async public Task<ActionResult<ReviewerDto>> GetByFullName(string firstname, string lastname)
         {
-            if (!await ReviewerExistByFullName(firstname, lastname))
+            if (!await UserExistByFullName(firstname, lastname))
                 return NotFound("Nie istnieje recenzja o takim ID");
 
             return Ok(_mapper.Map<List<ReviewerDto>>(_context.Reviewers.Where(p => p.Firstname == firstname && p.Lastname == lastname).FirstOrDefault()));
@@ -51,7 +51,7 @@ namespace ReviewsAPI.Services
 
         async public Task<ActionResult<ReviewerDto>> AddReviewer(ReviewerDtoAdd CreateDto)
         {
-            Reviewer newReviewer = new(CreateDto.Firstname, CreateDto.Lastname);
+            User newReviewer = new(CreateDto.Firstname, CreateDto.Lastname);
             await _context.Reviewers.AddAsync(newReviewer);
             await _context.SaveChangesAsync();
             return await GetReviewers();
@@ -59,7 +59,7 @@ namespace ReviewsAPI.Services
 
         async public Task<ActionResult<ReviewerDto>> EditReviewer(int id, ReviewerDtoAdd request)
         {
-            if (!await ReviewerExistById(id))
+            if (!await UserExistById(id))
                 return NotFound("Nie istnieje recenzent z takim id");
 
             var reviewerToUpdate = _context.Reviewers.Find(id);
@@ -72,7 +72,7 @@ namespace ReviewsAPI.Services
 
         async public Task<ActionResult<ReviewerDto>> DeleteReviewer(int id)
         {
-            if (!await ReviewerExistById(id))
+            if (!await UserExistById(id))
                 return NotFound("Nie istnieje recenzent z takim id");
 
             var reviewerToDelete = _context.Reviewers.Find(id);
@@ -83,7 +83,7 @@ namespace ReviewsAPI.Services
 
         async public Task<ActionResult<ReviewerDto>> GetReviews(int id)
         {
-            if (!await ReviewerExistById(id))
+            if (!await UserExistById(id))
                 return NotFound();
 
             var reviewer = _context.Reviewers.Where(i => i.id == id).ToList();

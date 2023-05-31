@@ -44,14 +44,14 @@ namespace ReviewsAPI.Services
             if (!await ReviewExistByID(idReview))
                 return BadRequest("Nie istnieje recenzja o takim Id!");
 
-            if (!await _reviewerServices.ReviewerExistById(idReviewer))
+            if (!await _reviewerServices.UserExistById(idReviewer))
                 return BadRequest("Nie istnieje recenzant o takim Id!");
 
             if (!await _drinksServices.DrinkExistByID(idDrink))
                 return BadRequest("Nie istnieje napój o takim Id!");
 
 
-            Reviewer reviewer = await _context.Reviewers.FindAsync(idReviewer);
+            User reviewer = await _context.Reviewers.FindAsync(idReviewer);
             Drink drink = await _context.Drinks.FindAsync(idDrink);
             Review review = await _context.Reviews.FindAsync(idReview);
 

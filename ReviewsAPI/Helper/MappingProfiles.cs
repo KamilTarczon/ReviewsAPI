@@ -8,7 +8,7 @@ namespace ReviewsAPI.Helper
     {
         public MappingProfiles() {
             CreateMap<Drink, DrinkDto>();
-            CreateMap<Reviewer, ReviewerDto>();
+            CreateMap<User, ReviewerDto>();
             CreateMap<Review, ReviewDto>();
             CreateMap<Review, Review>();
         }

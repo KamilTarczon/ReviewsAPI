@@ -73,7 +73,7 @@ namespace ReviewsAPI.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("ReviewsAPI.Models.Reviewer", b =>
+            modelBuilder.Entity("ReviewsAPI.Models.User", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -106,13 +106,13 @@ namespace ReviewsAPI.Migrations
                         .WithMany("Review")
                         .HasForeignKey("DrinkId");
 
-                    b.HasOne("ReviewsAPI.Models.Reviewer", "Reviewer")
+                    b.HasOne("ReviewsAPI.Models.User", "User")
                         .WithMany("Review")
                         .HasForeignKey("ReviewerId");
 
                     b.Navigation("Drink");
 
-                    b.Navigation("Reviewer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ReviewsAPI.Models.Drink", b =>
@@ -120,7 +120,7 @@ namespace ReviewsAPI.Migrations
                     b.Navigation("Review");
                 });
 
-            modelBuilder.Entity("ReviewsAPI.Models.Reviewer", b =>
+            modelBuilder.Entity("ReviewsAPI.Models.User", b =>
                 {
                     b.Navigation("Review");
                 });

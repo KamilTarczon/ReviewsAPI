@@ -65,7 +65,7 @@ namespace ReviewsAPI.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("ReviewsAPI.Models.Reviewer", b =>
+            modelBuilder.Entity("ReviewsAPI.Models.User", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()

@@ -13,16 +13,16 @@ namespace ReviewsAPI.Controllers
     [ApiController]
     public class ReviewerController : ControllerBase
     {
-        private readonly ReviewerServices _ReviewerServices;
+        private readonly UserServices _ReviewerServices;
 
-        public ReviewerController(ReviewerServices reviewerServices)
+        public ReviewerController(UserServices reviewerServices)
         {
             _ReviewerServices = reviewerServices;
         }
 
 
         [HttpGet]  // Done
-        public async Task<ActionResult<ReviewerDto>> GetAll()
+        public async Task<ActionResult<UserDto>> GetAll()
         {
             return await _ReviewerServices.GetReviewers();
         }
@@ -30,7 +30,7 @@ namespace ReviewsAPI.Controllers
 
 
         [HttpGet("id/{id}")]  // Done
-        public async Task<ActionResult<ReviewerDto>> GetById(int id)
+        public async Task<ActionResult<UserDto>> GetById(int id)
         {
             return await _ReviewerServices.GetById(id);
         }
@@ -38,7 +38,7 @@ namespace ReviewsAPI.Controllers
 
 
         [HttpGet("id/reviews/{id}")]  // Done
-        public async Task<ActionResult<ReviewerDto>> GetReviews(int id)
+        public async Task<ActionResult<UserDto>> GetReviews(int id)
         {
             return await _ReviewerServices.GetReviews(id);
         }
@@ -46,7 +46,7 @@ namespace ReviewsAPI.Controllers
 
 
         [HttpGet("fullname/{firstname},{lastname}")]  // Done
-        public async Task<ActionResult<ReviewerDto>> GetByFullName(string firstname, string lastname)
+        public async Task<ActionResult<UserDto>> GetByFullName(string firstname, string lastname)
         {
             return await _ReviewerServices.GetByFullName(firstname, lastname);
         }
@@ -54,7 +54,7 @@ namespace ReviewsAPI.Controllers
 
 
         [HttpPost]  // Done
-        public async Task<ActionResult<ReviewerDto>> CreateNewReviewer(ReviewerDtoAdd NewReviewer)
+        public async Task<ActionResult<UserDto>> CreateNewReviewer(UserDtoAdd NewReviewer)
         {
             return await _ReviewerServices.AddReviewer(NewReviewer);
         }
@@ -62,7 +62,7 @@ namespace ReviewsAPI.Controllers
 
 
         [HttpPut("edit/{id}")]  // Done
-        public async Task<ActionResult<ReviewerDto>> EditReviewer(int id, ReviewerDtoAdd editReviewer)
+        public async Task<ActionResult<UserDto>> EditReviewer(int id, UserDtoAdd editReviewer)
         {
             return await _ReviewerServices.EditReviewer(id, editReviewer);
         }
@@ -70,7 +70,7 @@ namespace ReviewsAPI.Controllers
 
 
         [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<ReviewerDto>> DeleteReviewer(int id)
+        public async Task<ActionResult<UserDto>> DeleteReviewer(int id)
         {
             return await _ReviewerServices.DeleteReviewer(id);
         }

@@ -6,7 +6,7 @@
         public string Title { get; set; }
         public string Text { get; set; }
         public float Rating { get; set; }
-        public Reviewer? Reviewer { get; set; }
+        public User? Reviewer { get; set; }
         public Drink? Drink { get; set; }
         public int? DrinkId { get; set; }
         public int? ReviewerId { get; set; }
